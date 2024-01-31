@@ -22,5 +22,5 @@ loop do
   puts "Price is #{merchandise[:price]}, amount #{merchandise[:amount]}. Total sum for the goods is #{merchandise[:sum]}"
 end
 
-puts "Please review your order: #{cart}"
+puts "Please, review your order: #{cart}"
 puts "Total cost is: #{total_sum}"
