@@ -56,7 +56,6 @@ class Route
 end
 
 class Train
-
   def initialize(serial, type)
     @serial = serial
     @type = type || 'passenger'
