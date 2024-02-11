@@ -45,35 +45,81 @@ class Route
 end
 
 # Класс Train (Поезд):
-# Имеет номер (произвольная строка)
-# и тип (грузовой, пассажирский) и количество вагонов,
-# эти данные указываются при создании экземпляра класса
-# Может набирать скорость
-# Может возвращать текущую скорость
-# Может тормозить (сбрасывать скорость до нуля)
-# Может возвращать количество вагонов
-# Может прицеплять/отцеплять вагоны (по одному вагону за операцию, метод просто увеличивает или уменьшает количество вагонов). Прицепка/отцепка вагонов может осуществляться только если поезд не движется.
-# Может принимать маршрут следования (объект класса Route).
-# При назначении маршрута поезду, поезд автоматически помещается на первую станцию в маршруте.
-# Может перемещаться между станциями, указанными в маршруте. Перемещение возможно вперед и назад, но только на 1 станцию за раз.
+# Может перемещаться между станциями, указанными в маршруте. Перемещение возможно вперед и назад,
+# но только на 1 станцию за раз.
 # Возвращать предыдущую станцию, текущую, следующую, на основе маршрута
 class Train
 
   def initialize(serial, type)
     @serial = serial
     @type = type
-    @route_stations = []
+    @speed = 0
+    @wagons_number = 0
+    @train_route = nil
+    @current_station = 0
   end
 
-  def route_stations=(station)
-    @route_stations << station
+  def accelerate=
+    @speed += 10
   end
 
-  def route
-    [@start_station, *@route_stations, @end_station]
+  def brake=
+    @speed = 0
   end
 
-  def remove_route_station
-    @route_stations.pop
+  def speed
+    @speed
+  end
+
+  def attach_wagon=
+    if @speed != 0
+      puts 'Train is moving. Are you insane?'
+    else
+      @wagons_number += 1
+    end
+  end
+
+  def detach_wagon=
+    if @speed != 0
+      puts 'Train is moving. Are you insane?'
+    else
+      if @wagons_number > 0
+        @wagons_number -= 1
+      end
+    end
+  end
+
+  def wagons_number
+    @wagons_number
+  end
+
+  def route=(route)
+    @route = route
+  end
+
+  def move_to_next_station
+    last_route_number = @train_route.route.length
+
+    if @current_station < last_route_number
+      @current_station += 1
+    end
+  end
+
+  def move_to_previous_station
+    if @current_station > 0
+      @current_station -= 1
+    end
+  end
+
+  def current_station
+    @train_route.route[@current_station]
+  end
+
+  def previous_station
+    @train_route.route[@current_station - 1] || nil
+  end
+
+  def next_station
+    @train_route.route[@current_station + 1] || nil
   end
 end
