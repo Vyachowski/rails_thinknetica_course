@@ -109,9 +109,9 @@ class Train
   end
 
   def move_to_next_station
-    last_route_number = @train_route.route.length
+    last_station_number = @train_route.route.length
 
-    if @current_station < last_route_number
+    if @current_station < last_station_number
       @current_station += 1
     end
   end
