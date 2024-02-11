@@ -19,7 +19,9 @@ class Station
   end
 
   def dispatch_train
-    @station_trains.pop
+    if @station_trains.length > 0
+      @station_trains.pop
+    end
   end
 
 end
@@ -35,19 +37,17 @@ class Route
     @route_stations << station
   end
 
+  def remove_route_station
+    if @station_trains.length > 0
+      @route_stations.pop
+    end
+  end
+
   def route
     [@start_station, *@route_stations, @end_station]
   end
-
-  def remove_route_station
-    @route_stations.pop
-  end
 end
 
-# Класс Train (Поезд):
-# Может перемещаться между станциями, указанными в маршруте. Перемещение возможно вперед и назад,
-# но только на 1 станцию за раз.
-# Возвращать предыдущую станцию, текущую, следующую, на основе маршрута
 class Train
 
   def initialize(serial, type)
@@ -94,7 +94,11 @@ class Train
   end
 
   def route=(route)
-    @route = route
+    if route.instance_of?(Route)
+      @route = route
+    else
+      puts "You can assign only Route instance as a route for a train."
+    end
   end
 
   def move_to_next_station
