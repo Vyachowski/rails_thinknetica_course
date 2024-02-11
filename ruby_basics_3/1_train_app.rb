@@ -4,12 +4,20 @@ class Station
     @station_trains = []
   end
 
-  def station_train=(train)
-    @station_trains << train
+  def station_trains=(train)
+    if train.is_a?(Hash)
+      @station_trains << train
+    else
+      puts "Train should be an object with a name and a type"
+    end
   end
 
   def station_trains
-    @station_trains
+    if @station_trains.length > 0
+      @station_trains
+    else
+      puts "No trains on the station"
+    end
   end
 
   def station_trains_by_type(type)
@@ -23,7 +31,6 @@ class Station
       @station_trains.pop
     end
   end
-
 end
 
 class Route
@@ -52,18 +59,18 @@ class Train
 
   def initialize(serial, type)
     @serial = serial
-    @type = type
+    @type = type || 'passenger'
     @speed = 0
     @wagons_number = 0
     @train_route = nil
     @current_station = 0
   end
 
-  def accelerate=
+  def accelerate
     @speed += 10
   end
 
-  def brake=
+  def brake
     @speed = 0
   end
 
@@ -71,7 +78,7 @@ class Train
     @speed
   end
 
-  def attach_wagon=
+  def attach_wagon
     if @speed != 0
       puts 'Train is moving. Are you insane?'
     else
@@ -79,7 +86,7 @@ class Train
     end
   end
 
-  def detach_wagon=
+  def detach_wagon
     if @speed != 0
       puts 'Train is moving. Are you insane?'
     else
@@ -93,9 +100,10 @@ class Train
     @wagons_number
   end
 
-  def route=(route)
-    if route.instance_of?(Route)
-      @route = route
+  def route(train_route)
+    if train_route.instance_of?(Route)
+      @train_route = train_route
+      puts @train_route
     else
       puts "You can assign only Route instance as a route for a train."
     end
@@ -120,10 +128,21 @@ class Train
   end
 
   def previous_station
-    @train_route.route[@current_station - 1] || nil
+    if @current_station > 0
+      @train_route.route[@current_station - 1]
+    else
+      puts "This is a first station."
+    end
   end
 
   def next_station
-    @train_route.route[@current_station + 1] || nil
+    next_station_number = @current_station + 1
+    max_stations_number = @train_route.route.length
+
+    if next_station_number < max_stations_number
+      @train_route.route[@current_station + 1]
+    else
+      puts "This is a last station."
+    end
   end
 end
